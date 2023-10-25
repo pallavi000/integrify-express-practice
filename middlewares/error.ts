@@ -7,5 +7,5 @@ export function errorLoggingMiddleware(
   next: NextFunction
 ) {
   console.log("👀 ERRROOOR!!");
-  res.json({ msg: "ERROR!!!!" });
+  // res.json({ msg: "ERROR!!!!" });
 }
