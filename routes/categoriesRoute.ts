@@ -9,11 +9,12 @@ import {
   findOneCategory,
   updateCategory,
 } from "../controllers/categoriesController";
+import { validateCategory } from "../middlewares/categoryValidate";
 
 router.get("/", findAllCategory);
 router.get("/:categoryId", findOneCategory);
-router.post("/", createOneCategory);
-router.put("/:categoryId", updateCategory);
+router.post("/", validateCategory, createOneCategory);
+router.put("/:categoryId", validateCategory, updateCategory);
 router.delete("/:categoryId", deleteCategory);
 
 export default router;

@@ -12,11 +12,6 @@ export function loggingMiddleware(
 
   res.once("finish", () => {
     console.log(`${res.statusCode} ${res.statusMessage}`);
-
-    const entity = res.locals.entity;
-    if (entity) {
-      console.log(`Entity created: ${entity.type} ${entity.id}`);
-    }
   });
 
   next();
