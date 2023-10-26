@@ -1,8 +1,8 @@
-import { Category } from "../types/category";
+import { Category, categoryWithId } from "../types/category";
 
 // Simulating a DataBase
 export class CategoryRepo {
-  categories = [
+  categories: categoryWithId[] = [
     {
       id: 1,
       name: "Clothes",
