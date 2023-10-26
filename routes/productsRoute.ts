@@ -1,15 +1,14 @@
 import express from "express";
-
-const router = express.Router();
-
 import {
+  createOneProduct,
+  deleteProduct,
   findAllProduct,
   findOneProduct,
-  createOneProduct,
   updateProduct,
-  deleteProduct,
 } from "../controllers/productsController";
 import { validateProduct } from "../middlewares/productValidate";
+
+const router = express.Router();
 
 router.get("/", findAllProduct);
 router.get("/:productId", findOneProduct);
