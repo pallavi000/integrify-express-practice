@@ -36,8 +36,10 @@ export class CategoryRepo {
   }
 
   createOne(newCategory: Category) {
-    this.categories = [...this.categories, newCategory];
-    return newCategory;
+    const id = this.categories.length + 1;
+    const categoryWithId = { ...newCategory, id };
+    this.categories = [...this.categories, categoryWithId];
+    return categoryWithId;
   }
 
   updateCategory(categoryIndex: number, updateCategoryData: Category) {

@@ -1,4 +1,5 @@
 import { CategoryRepo } from "../models/category";
+import { Category } from "../types/category";
 
 const categoriesRepo = new CategoryRepo();
 
@@ -12,31 +13,31 @@ function findOne(categoryId: number) {
   return category;
 }
 
-// function findIndex(productId: number) {
-//   const productIndex = productsRepo.findIndex(productId);
-//   return productIndex;
-// }
+function findIndex(categoryId: number) {
+  const categoryIndex = categoriesRepo.findIndex(categoryId);
+  return categoryIndex;
+}
 
-// function createOne(product: Product) {
-//   const newProduct = productsRepo.createOne(product);
-//   return newProduct;
-// }
+function createOne(category: Category) {
+  const newCategory = categoriesRepo.createOne(category);
+  return newCategory;
+}
 
-// function updateProduct(productIndex: number, product: Product) {
-//   const updateProduct = productsRepo.updateProduct(productIndex, product);
-//   return updateProduct;
-// }
+function updateCategory(categoryIndex: number, category: Category) {
+  const updateCategory = categoriesRepo.updateCategory(categoryIndex, category);
+  return updateCategory;
+}
 
-// function deleteProduct(productIndex: number) {
-//   const product = productsRepo.deleteProduct(productIndex);
-//   return product;
-// }
+function deleteCategory(categoryIndex: number) {
+  const category = categoriesRepo.deleteCategory(categoryIndex);
+  return category;
+}
 
 export default {
   findOne,
   findAll,
-  // createOne,
-  // findIndex,
-  // updateProduct,
-  // deleteProduct,
+  createOne,
+  findIndex,
+  updateCategory,
+  deleteCategory,
 };
