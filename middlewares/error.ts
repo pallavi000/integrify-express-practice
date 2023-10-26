@@ -1,4 +1,4 @@
-import { NextFunction } from "express";
+import { NextFunction, Request, Response } from "express";
 
 export function errorLoggingMiddleware(
   error: Error,
@@ -7,5 +7,5 @@ export function errorLoggingMiddleware(
   next: NextFunction
 ) {
   console.log("👀 ERRROOOR!!");
-  // res.json({ msg: "ERROR!!!!" });
+  res.send({ msg: "ERROR!!!!" });
 }

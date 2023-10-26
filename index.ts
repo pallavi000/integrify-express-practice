@@ -10,6 +10,7 @@ const PORT = 8080;
 const app = express();
 app.use(express.json());
 
+app.use(loggingMiddleware);
 app.use("/api/v1/items", itemsRoute);
 app.use("/api/v1/products", productsRoute);
 app.use("/api/v1/categories", categoriesRoute);
