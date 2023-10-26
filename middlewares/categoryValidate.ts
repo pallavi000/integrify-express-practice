@@ -8,23 +8,15 @@ export const CategorySchema = z.strictObject({
   image: z.string().optional(),
 });
 
-const category = {
-  name: "Albin",
-  age: 30,
-};
-
-console.log(CategorySchema.safeParse(category));
-
 export async function validateCategory(
   req: Request,
   res: Response,
   next: NextFunction
 ) {
-  // Use safeParse to handle errors without throwing exceptions
-  const result = await CategorySchema.safeParseAsync(req.body);
-  if (result.success) {
+  try {
+    await CategorySchema.parseAsync(req.body);
     return next();
-  } else {
-    return res.status(400).json(result.error);
+  } catch (error) {
+    return res.status(400).json(error);
   }
 }

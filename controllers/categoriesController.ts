@@ -3,9 +3,17 @@ import { NextFunction, Request, Response } from "express";
 import CategoryService from "../services/categoryService";
 import { ApiError } from "../errors/ApiError.js";
 
-export function findAllCategory(_: Request, res: Response) {
-  const categories = CategoryService.findAll();
-  res.json({ categories });
+export async function findAllCategory(
+  _: Request,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const categories = CategoryService.findAll();
+    res.json({ categories });
+  } catch (error) {
+    next(ApiError.internal("Internal server error"));
+  }
 }
 
 export function findOneCategory(
@@ -32,10 +40,18 @@ export function findOneCategory(
   }
 }
 
-export function createOneCategory(req: Request, res: Response) {
-  const newCategory = req.body;
-  const category = CategoryService.createOne(newCategory);
-  res.status(201).json({ category });
+export async function createOneCategory(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const newCategory = req.body;
+    const category = CategoryService.createOne(newCategory);
+    res.status(201).json({ category });
+  } catch (error) {
+    next(ApiError.internal("Internal server error"));
+  }
 }
 
 export function updateCategory(
