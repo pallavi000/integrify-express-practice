@@ -12,7 +12,7 @@ import categoriesRoute from "./routes/categoriesRoute";
 
 // app config
 const app = express();
-const PORT = 8080;
+const PORT = 8050;
 
 // middleware connections
 app.use(express.json());
