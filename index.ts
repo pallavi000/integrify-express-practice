@@ -6,9 +6,9 @@ import { errorLoggingMiddleware } from "./middlewares/error";
 import { routeNotFound } from "./middlewares/routeNotFound";
 
 // routes
-import itemsRoute from "./routes/itemsRoute";
 import productsRoute from "./routes/productsRoute";
 import categoriesRoute from "./routes/categoriesRoute";
+import usersRoute from "./routes/usersRoute.js";
 
 // app config
 const app = express();
@@ -19,9 +19,9 @@ app.use(express.json());
 app.use(loggingMiddleware);
 
 // define routes
-app.use("/`api`/v1/items", itemsRoute);
 app.use("/api/v1/products", productsRoute);
 app.use("/api/v1/categories", categoriesRoute);
+app.use("/api/v1/users", usersRoute);
 app.use(errorLoggingMiddleware);
 // catch-all route for non-existing routes
 app.use("*", routeNotFound);
