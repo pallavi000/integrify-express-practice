@@ -1,21 +1,32 @@
 import express from "express";
 
+// middlewares
+import { loggingMiddleware } from "./middlewares/logging";
+import { errorLoggingMiddleware } from "./middlewares/error";
+import { routeNotFound } from "./middlewares/routeNotFound";
+
+// routes
 import itemsRoute from "./routes/itemsRoute";
 import productsRoute from "./routes/productsRoute";
-import { loggingMiddleware } from "./middlewares/logging";
 import categoriesRoute from "./routes/categoriesRoute";
-import { errorLoggingMiddleware } from "./middlewares/error";
 
-const PORT = 8080;
+// app config
 const app = express();
-app.use(express.json());
+const PORT = 8080;
 
+// middleware connections
+app.use(express.json());
 app.use(loggingMiddleware);
-app.use("/api/v1/items", itemsRoute);
+
+// define routes
+app.use("/`api`/v1/items", itemsRoute);
 app.use("/api/v1/products", productsRoute);
 app.use("/api/v1/categories", categoriesRoute);
 app.use(errorLoggingMiddleware);
+// catch-all route for non-existing routes
+app.use("*", routeNotFound);
 
+// run server
 app.listen(PORT, () => {
   console.log(`app is running at localhost:${PORT}`);
 });

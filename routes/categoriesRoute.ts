@@ -1,7 +1,6 @@
 import express from "express";
 
-const router = express.Router();
-
+// controllers
 import {
   createOneCategory,
   deleteCategory,
@@ -9,12 +8,26 @@ import {
   findOneCategory,
   updateCategory,
 } from "../controllers/categoriesController";
-import { validateCategory } from "../middlewares/categoryValidate";
 
+// middlewares
+import { validateSchema } from "../middlewares/schemaValidate";
+import { validateParams } from "../middlewares/paramsValidate";
+
+// schema
+import { CategorySchema } from "../models/category";
+
+const router = express.Router();
+
+// routes
 router.get("/", findAllCategory);
-router.get("/:categoryId", findOneCategory);
-router.post("/", validateCategory, createOneCategory);
-router.put("/:categoryId", validateCategory, updateCategory);
-router.delete("/:categoryId", deleteCategory);
+router.get("/:id", validateParams, findOneCategory);
+router.post("/", validateSchema(CategorySchema), createOneCategory);
+router.put(
+  "/:id",
+  validateParams,
+  validateSchema(CategorySchema),
+  updateCategory
+);
+router.delete("/:id", validateParams, deleteCategory);
 
 export default router;

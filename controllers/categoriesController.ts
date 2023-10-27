@@ -1,6 +1,9 @@
 import { NextFunction, Request, Response } from "express";
 
+// services
 import CategoryService from "../services/categoryService";
+
+// error builder
 import { ApiError } from "../errors/ApiError.js";
 
 export async function findAllCategory(
@@ -22,11 +25,7 @@ export function findOneCategory(
   next: NextFunction
 ) {
   try {
-    const categoryId = Number(req.params.categoryId);
-    if (isNaN(categoryId) || categoryId <= 0) {
-      const badRequestError = ApiError.badRequest("Invalid category ID.");
-      return next(badRequestError);
-    }
+    const categoryId = Number(req.params.id);
     const category = CategoryService.findOne(categoryId);
     if (!category) {
       const notFoundError = ApiError.resourceNotFound("Category not found.");
@@ -35,7 +34,6 @@ export function findOneCategory(
     res.status(200).json({ category });
   } catch (error) {
     const internalServerError = ApiError.internal("Internal server error.");
-    console.error("Error in findOneCategory:", error);
     next(internalServerError);
   }
 }
@@ -59,18 +57,21 @@ export function updateCategory(
   res: Response,
   next: NextFunction
 ) {
-  const categoryId = Number(req.params.categoryId);
-  const updateCategoryData = req.body;
-  const categoryIndex = CategoryService.findIndex(categoryId);
-  if (categoryIndex === -1) {
-    next(ApiError.resourceNotFound("Product not found."));
-    return;
+  try {
+    const categoryId = Number(req.params.id);
+    const updateCategoryData = req.body;
+    const categoryIndex = CategoryService.findIndex(categoryId);
+    if (categoryIndex === -1) {
+      return next(ApiError.resourceNotFound("Category not found."));
+    }
+    const updatedProduct = CategoryService.updateCategory(
+      categoryIndex,
+      updateCategoryData
+    );
+    res.status(201).json({ updatedProduct });
+  } catch (error) {
+    next(ApiError.internal("Internal server error"));
   }
-  const updatedProduct = CategoryService.updateCategory(
-    categoryIndex,
-    updateCategoryData
-  );
-  res.status(201).json({ updatedProduct });
 }
 
 export function deleteCategory(
@@ -78,12 +79,16 @@ export function deleteCategory(
   res: Response,
   next: NextFunction
 ) {
-  const categoryId = Number(req.params.categoryId);
-  const categoryIndex = CategoryService.findIndex(categoryId);
-  if (categoryIndex === -1) {
-    next(ApiError.resourceNotFound("Category not found."));
-    return;
+  try {
+    const categoryId = Number(req.params.id);
+    const categoryIndex = CategoryService.findIndex(categoryId);
+    if (categoryIndex === -1) {
+      next(ApiError.resourceNotFound("Category not found."));
+      return;
+    }
+    CategoryService.deleteCategory(categoryIndex);
+    res.status(201).json({ msg: "Category Delete successfully" });
+  } catch (error) {
+    next(ApiError.internal("Internal server error"));
   }
-  CategoryService.deleteCategory(categoryIndex);
-  res.status(201).json("Category Delete successfully");
 }

@@ -1,4 +1,6 @@
 import express from "express";
+
+// controllers
 import {
   createOneProduct,
   deleteProduct,
@@ -6,14 +8,26 @@ import {
   findOneProduct,
   updateProduct,
 } from "../controllers/productsController";
-import { validateProduct } from "../middlewares/productValidate";
+
+// middlewares
+import { validateParams } from "../middlewares/paramsValidate";
+import { validateSchema } from "../middlewares/schemaValidate";
+
+// schema
+import { ProductSchema } from "../models/product";
 
 const router = express.Router();
 
+// routes
 router.get("/", findAllProduct);
-router.get("/:productId", findOneProduct);
-router.post("/", validateProduct, createOneProduct);
-router.put("/:productId", validateProduct, updateProduct);
-router.delete("/:productId", deleteProduct);
+router.get("/:id", validateParams, findOneProduct);
+router.post("/", validateSchema(ProductSchema), createOneProduct);
+router.put(
+  "/:id",
+  validateParams,
+  validateSchema(ProductSchema),
+  updateProduct
+);
+router.delete("/:id", validateParams, deleteProduct);
 
 export default router;

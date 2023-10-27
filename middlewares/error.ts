@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from "express";
+import { ApiError } from "../errors/ApiError";
 
 export function errorLoggingMiddleware(
   error: Error,
@@ -7,5 +8,9 @@ export function errorLoggingMiddleware(
   next: NextFunction
 ) {
   console.log("👀 ERRROOOR!!");
-  res.send({ msg: "ERROR!!!!" });
+  if (error instanceof ApiError) {
+    res.status(error.code).json(error);
+  } else {
+    res.status(500).json({ code: 500, msg: "👀 ERRROOOR!!" });
+  }
 }

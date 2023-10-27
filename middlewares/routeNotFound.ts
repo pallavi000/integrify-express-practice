@@ -1,5 +1,7 @@
 import { Request, Response } from "express";
+import { ApiError } from "../errors/ApiError";
 
 export function routeNotFound(_: Request, res: Response) {
-  res.status(404).json({ msg: "Route Not Found." });
+  const error = ApiError.resourceNotFound("Route not found.");
+  res.status(error.code).json({ code: error.code, msg: error.message });
 }

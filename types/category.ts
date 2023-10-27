@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { CategorySchema } from "../middlewares/categoryValidate";
+import { CategorySchema } from "../models/category";
 
 export type Category = z.infer<typeof CategorySchema>;
 

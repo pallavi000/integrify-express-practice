@@ -1,4 +1,13 @@
 import { Category, categoryWithId } from "../types/category";
+import { z } from "zod";
+
+// schema
+export const CategorySchema = z.strictObject({
+  name: z.string({
+    required_error: "Name is required",
+  }),
+  image: z.string().optional(),
+});
 
 // Simulating a DataBase
 export class CategoryRepo {
@@ -20,6 +29,12 @@ export class CategoryRepo {
     },
   ];
 
+  generateNewId() {
+    if (!this.categories.length) return 1;
+    const maxId = Math.max(...this.categories.map((category) => category.id));
+    return maxId + 1;
+  }
+
   findOne(categoryId: number) {
     const category = this.categories.find(
       (category) => category.id === categoryId
@@ -36,7 +51,7 @@ export class CategoryRepo {
   }
 
   createOne(newCategory: Category) {
-    const id = this.categories.length + 1;
+    const id = this.generateNewId();
     const categoryWithId = { ...newCategory, id };
     this.categories = [...this.categories, categoryWithId];
     return categoryWithId;
