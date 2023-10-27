@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { ZodObject, ZodRawShape, z } from "zod";
+import { z } from "zod";
 
 export const validateSchema = (schema: z.Schema<any>) => {
   return async (req: Request, res: Response, next: NextFunction) => {

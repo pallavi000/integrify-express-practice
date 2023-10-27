@@ -9,7 +9,7 @@ import { ApiError } from "../errors/ApiError.js";
 export function findAllProduct(_: Request, res: Response, next: NextFunction) {
   try {
     const products = ProductService.findAll();
-    res.json({ products });
+    res.json(products);
   } catch (error) {
     next(ApiError.internal("Internal server error"));
   }
@@ -27,7 +27,7 @@ export function findOneProduct(
       next(ApiError.resourceNotFound("Product not found."));
       return;
     }
-    res.json({ product });
+    res.json(product);
   } catch (error) {
     next(ApiError.internal("Internal server error"));
   }
@@ -41,7 +41,7 @@ export function createOneProduct(
   try {
     const newProduct = req.body;
     const product = ProductService.createOne(newProduct);
-    res.status(201).json({ product });
+    res.status(201).json(product);
   } catch (error) {
     next(ApiError.internal("Internal server error"));
   }
@@ -51,16 +51,16 @@ export function updateProduct(req: Request, res: Response, next: NextFunction) {
   try {
     const productId = Number(req.params.id);
     const updateProductData = req.body;
-    const productIndex = ProductService.findIndex(productId);
-    if (productIndex === -1) {
+    const product = ProductService.findOne(productId);
+    if (!product) {
       next(ApiError.resourceNotFound("Product not found."));
       return;
     }
     const updatedProduct = ProductService.updateProduct(
-      productIndex,
+      productId,
       updateProductData
     );
-    res.status(201).json({ updatedProduct });
+    res.json(updatedProduct);
   } catch (error) {
     next(ApiError.internal("Internal server error"));
   }
@@ -69,13 +69,13 @@ export function updateProduct(req: Request, res: Response, next: NextFunction) {
 export function deleteProduct(req: Request, res: Response, next: NextFunction) {
   try {
     const productId = Number(req.params.id);
-    const productIndex = ProductService.findIndex(productId);
-    if (productIndex === -1) {
+    const product = ProductService.findOne(productId);
+    if (!product) {
       next(ApiError.resourceNotFound("Product not found."));
       return;
     }
-    ProductService.deleteProduct(productIndex);
-    res.status(201).json({ msg: "Product Delete successfully" });
+    ProductService.deleteProduct(productId);
+    res.status(204).send();
   } catch (error) {
     next(ApiError.internal("Internal server error"));
   }

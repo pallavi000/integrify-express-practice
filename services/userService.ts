@@ -1,42 +1,38 @@
-import { UserRepo } from "../models/User"
-import { User } from "../types/users"
+import { UserRepo } from "../models/user";
 
-const usersRepo = new UserRepo()
+// types
+import { TUser } from "../types/users";
+
+const usersRepo = new UserRepo();
 //business logic should be in services
 
 function findAllUser() {
-    const users = usersRepo.findAllUser();
-    return users;
+  return usersRepo.findAllUser();
 }
 
 function findSingleUser(userId: number) {
-    const user = usersRepo.findSingleUser(userId);
-    return user;
+  return usersRepo.findSingleUser(userId);
 }
 
-function createUser(user: User) {
-    const newUser = usersRepo.createUser(user);
-    return newUser;
+function createUser(user: TUser) {
+  return usersRepo.createUser(user);
 }
 
 function deleteUser(userId: number) {
-    const userIndex = usersRepo.deleteUser(userId);
-    return userIndex;
+  return usersRepo.deleteUser(userId);
 }
-function updateUserInfo(userIndex:number, data: User) {
-    const userData = usersRepo.updateUserInfo(userIndex, data);
-    return userData;
+function updateUserInfo(userId: number, data: TUser) {
+  return usersRepo.updateUserInfo(userId, data);
 }
-function findIndex(userId:number) {
-    const userIndex = usersRepo.findIndex(userId);
-    return userIndex;
+function findIndex(userId: number) {
+  return usersRepo.findIndex(userId);
 }
 
 export default {
-    findSingleUser,
-    findAllUser,
-    createUser,
-    deleteUser,
-    updateUserInfo,
-    findIndex
-}
+  findSingleUser,
+  findAllUser,
+  createUser,
+  deleteUser,
+  updateUserInfo,
+  findIndex,
+};

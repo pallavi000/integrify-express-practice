@@ -1,36 +1,32 @@
 import { ProductRepo } from "../models/product";
-import { Product } from "../types/product.js";
+
+// types
+import { TProduct } from "../types/product.js";
 
 const productsRepo = new ProductRepo();
 
 function findAll() {
-  const products = productsRepo.findAll();
-  return products;
+  return productsRepo.findAll();
 }
 
 function findOne(productId: number) {
-  const product = productsRepo.findOne(productId);
-  return product;
+  return productsRepo.findOne(productId);
 }
 
 function findIndex(productId: number) {
-  const productIndex = productsRepo.findIndex(productId);
-  return productIndex;
+  return productsRepo.findIndex(productId);
 }
 
-function createOne(product: Product) {
-  const newProduct = productsRepo.createOne(product);
-  return newProduct;
+function createOne(product: TProduct) {
+  return productsRepo.createOne(product);
 }
 
-function updateProduct(productIndex: number, product: Product) {
-  const updateProduct = productsRepo.updateProduct(productIndex, product);
-  return updateProduct;
+function updateProduct(productId: number, product: TProduct) {
+  return productsRepo.updateProduct(productId, product);
 }
 
-function deleteProduct(productIndex: number) {
-  const product = productsRepo.deleteProduct(productIndex);
-  return product;
+function deleteProduct(productId: number) {
+  return productsRepo.deleteProduct(productId);
 }
 
 export default {

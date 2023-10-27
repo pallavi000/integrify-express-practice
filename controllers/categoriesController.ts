@@ -13,7 +13,7 @@ export async function findAllCategory(
 ) {
   try {
     const categories = CategoryService.findAll();
-    res.json({ categories });
+    res.json(categories);
   } catch (error) {
     next(ApiError.internal("Internal server error"));
   }
@@ -31,7 +31,7 @@ export function findOneCategory(
       const notFoundError = ApiError.resourceNotFound("Category not found.");
       return next(notFoundError);
     }
-    res.status(200).json({ category });
+    res.json(category);
   } catch (error) {
     const internalServerError = ApiError.internal("Internal server error.");
     next(internalServerError);
@@ -46,7 +46,7 @@ export async function createOneCategory(
   try {
     const newCategory = req.body;
     const category = CategoryService.createOne(newCategory);
-    res.status(201).json({ category });
+    res.status(201).json(category);
   } catch (error) {
     next(ApiError.internal("Internal server error"));
   }
@@ -60,15 +60,15 @@ export function updateCategory(
   try {
     const categoryId = Number(req.params.id);
     const updateCategoryData = req.body;
-    const categoryIndex = CategoryService.findIndex(categoryId);
-    if (categoryIndex === -1) {
+    const category = CategoryService.findOne(categoryId);
+    if (!category) {
       return next(ApiError.resourceNotFound("Category not found."));
     }
-    const updatedProduct = CategoryService.updateCategory(
-      categoryIndex,
+    const updatedCategory = CategoryService.updateCategory(
+      categoryId,
       updateCategoryData
     );
-    res.status(201).json({ updatedProduct });
+    res.json(updatedCategory);
   } catch (error) {
     next(ApiError.internal("Internal server error"));
   }
@@ -81,13 +81,13 @@ export function deleteCategory(
 ) {
   try {
     const categoryId = Number(req.params.id);
-    const categoryIndex = CategoryService.findIndex(categoryId);
-    if (categoryIndex === -1) {
+    const category = CategoryService.findOne(categoryId);
+    if (!category) {
       next(ApiError.resourceNotFound("Category not found."));
       return;
     }
-    CategoryService.deleteCategory(categoryIndex);
-    res.status(201).json({ msg: "Category Delete successfully" });
+    CategoryService.deleteCategory(categoryId);
+    res.status(204).send();
   } catch (error) {
     next(ApiError.internal("Internal server error"));
   }

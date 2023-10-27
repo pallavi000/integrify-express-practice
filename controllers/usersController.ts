@@ -1,73 +1,86 @@
-import { Request, Response, NextFunction } from 'express';
-import  UserService  from '../services/userService'
-import { ApiError } from '../errors/ApiError';
+import { Request, Response, NextFunction } from "express";
 
-export function findAllUser(_: Request, res: Response) {
+// services
+import UserService from "../services/userService";
+
+// error builder
+import { ApiError } from "../errors/ApiError";
+
+export function findAllUser(_: Request, res: Response, next: NextFunction) {
+  try {
     const users = UserService.findAllUser();
-    res.json({ users });
+    res.json(users);
+  } catch (error) {
+    next(ApiError.internal("Internal server error"));
+  }
 }
+
 export function findSingleUser(
-    req: Request,
-    res: Response,
-    next: NextFunction) {
-    const userId = +req.params.userId;
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const userId = Number(req.params.id);
     const user = UserService.findSingleUser(userId);
-    try { 
-        if (!user) {
-            next(ApiError.resourceNotFound("User not found."));
-            return;
-        }
-        res.status(200).json(user);
-    } catch (error) {
-        
+    if (!user) {
+      next(ApiError.resourceNotFound("User not found."));
+      return;
     }
+    res.json(user);
+  } catch (error) {
+    next(ApiError.internal("Internal server error"));
+  }
 }
-export function createUser(req: Request, res: Response) {
+
+export function createUser(req: Request, res: Response, next: NextFunction) {
+  try {
     const newUser = req.body;
-
     const user = UserService.createUser(newUser);
-    res.status(201).json({ user });
+    res.status(201).json(user);
+  } catch (error) {
+    next(ApiError.internal("Internal server error"));
+  }
 }
 
-export function deleteUser(
-    req: Request,
-    res: Response,
-    next: NextFunction) {
-    try {
-        const userId = +req.params.userId;
-        const userIndex = UserService.deleteUser(userId);
-        if (userIndex === -1) {
-            next(ApiError.resourceNotFound("User not found."));
-            return;
-        } 
-        res.status(201).json({ message: "User deleted successfully" });
-    } catch(error) {
-        next(ApiError.interal("Internernal error..."));
+export function deleteUser(req: Request, res: Response, next: NextFunction) {
+  try {
+    const userId = Number(req.params.id);
+    const user = UserService.findSingleUser(userId);
+    if (!user) {
+      next(ApiError.resourceNotFound("User not found."));
+      return;
     }
+    UserService.deleteUser(userId);
+    res.status(204).send();
+  } catch (error) {
+    next(ApiError.internal("Internernal error..."));
+  }
 }
 export function updateUserInfo(
-    req: Request,
-    res: Response,
-    next: NextFunction) {
-    try {
-        const userId = +req.params.userId;
-        const userData = req.body;
-        const userIndex = UserService.findIndex(userId);
-        if (userIndex === -1) {
-            next(ApiError.resourceNotFound("User not found."));
-            return; 
-        }
-        const updatedUser = UserService.updateUserInfo(userIndex, userData);
-        res.json({ message: "User updated successfully" })
-    } catch (error) {
-        next(ApiError.interal("Internernal error..."));
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const userId = Number(req.params.id);
+    const userData = req.body;
+    const user = UserService.findSingleUser(userId);
+    if (!user) {
+      next(ApiError.resourceNotFound("User not found."));
+      return;
     }
+    const updatedUser = UserService.updateUserInfo(userId, userData);
+    res.json(updatedUser);
+  } catch (error) {
+    next(ApiError.internal("Internal server error"));
+  }
 }
 
 export default {
-    findAllUser,
-    findSingleUser,
-    createUser,
-    deleteUser,
-    updateUserInfo,
-}
+  findAllUser,
+  findSingleUser,
+  createUser,
+  deleteUser,
+  updateUserInfo,
+};

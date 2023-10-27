@@ -1,14 +1,18 @@
 import { z } from "zod";
-import { Product, TProductSchema } from "../types/product";
+
+// types
+import { TProduct, TProductSchema } from "../types/product";
 
 // schema
 export const ProductSchema = z.strictObject({
   name: z.string({
     required_error: "Name is required",
   }),
-  price: z.number({
-    required_error: "Price is required",
-  }),
+  price: z
+    .number({
+      required_error: "Price is required",
+    })
+    .positive(),
   description: z.string({
     required_error: "Description is required",
   }),
@@ -18,7 +22,7 @@ export const ProductSchema = z.strictObject({
 
 // Simulating a DataBase
 export class ProductRepo {
-  products: Product[] = [
+  products: TProduct[] = [
     {
       id: 1,
       price: 100,
@@ -65,7 +69,8 @@ export class ProductRepo {
     return product;
   }
 
-  updateProduct(productIndex: number, updateProductData: TProductSchema) {
+  updateProduct(productId: number, updateProductData: TProductSchema) {
+    const productIndex = this.findIndex(productId);
     this.products[productIndex] = {
       ...this.products[productIndex],
       ...updateProductData,
@@ -73,8 +78,8 @@ export class ProductRepo {
     return this.products[productIndex];
   }
 
-  deleteProduct(productIndex: number) {
-    const product = this.products.splice(productIndex, 1);
-    return product;
+  deleteProduct(productId: number) {
+    this.products = this.products.filter((product) => product.id !== productId);
+    return;
   }
 }

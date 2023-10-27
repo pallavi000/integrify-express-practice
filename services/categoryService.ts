@@ -1,36 +1,32 @@
 import { CategoryRepo } from "../models/category";
-import { Category } from "../types/category";
+
+// types
+import { TCategory } from "../types/category";
 
 const categoriesRepo = new CategoryRepo();
 
 function findAll() {
-  const categories = categoriesRepo.findAll();
-  return categories;
+  return categoriesRepo.findAll();
 }
 
 function findOne(categoryId: number) {
-  const category = categoriesRepo.findOne(categoryId);
-  return category;
+  return categoriesRepo.findOne(categoryId);
 }
 
 function findIndex(categoryId: number) {
-  const categoryIndex = categoriesRepo.findIndex(categoryId);
-  return categoryIndex;
+  return categoriesRepo.findIndex(categoryId);
 }
 
-function createOne(category: Category) {
-  const newCategory = categoriesRepo.createOne(category);
-  return newCategory;
+function createOne(category: TCategory) {
+  return categoriesRepo.createOne(category);
 }
 
-function updateCategory(categoryIndex: number, category: Category) {
-  const updateCategory = categoriesRepo.updateCategory(categoryIndex, category);
-  return updateCategory;
+function updateCategory(categoryId: number, category: TCategory) {
+  return categoriesRepo.updateCategory(categoryId, category);
 }
 
-function deleteCategory(categoryIndex: number) {
-  const category = categoriesRepo.deleteCategory(categoryIndex);
-  return category;
+function deleteCategory(categoryId: number) {
+  return categoriesRepo.deleteCategory(categoryId);
 }
 
 export default {

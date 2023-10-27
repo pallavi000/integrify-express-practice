@@ -1,5 +1,7 @@
-import { Category, categoryWithId } from "../types/category";
 import { z } from "zod";
+
+// types
+import { TCategory, TCategorySchema } from "../types/category";
 
 // schema
 export const CategorySchema = z.strictObject({
@@ -11,7 +13,7 @@ export const CategorySchema = z.strictObject({
 
 // Simulating a DataBase
 export class CategoryRepo {
-  categories: categoryWithId[] = [
+  categories: TCategory[] = [
     {
       id: 1,
       name: "Clothes",
@@ -50,14 +52,15 @@ export class CategoryRepo {
     return this.categories;
   }
 
-  createOne(newCategory: Category) {
+  createOne(newCategory: TCategorySchema) {
     const id = this.generateNewId();
     const categoryWithId = { ...newCategory, id };
     this.categories = [...this.categories, categoryWithId];
     return categoryWithId;
   }
 
-  updateCategory(categoryIndex: number, updateCategoryData: Category) {
+  updateCategory(categoryId: number, updateCategoryData: TCategorySchema) {
+    const categoryIndex = this.findIndex(categoryId);
     if (categoryIndex !== -1) {
       this.categories[categoryIndex] = {
         ...this.categories[categoryIndex],
@@ -68,10 +71,10 @@ export class CategoryRepo {
     return null;
   }
 
-  deleteCategory(categoryIndex: number) {
-    if (categoryIndex !== -1) {
-      return this.categories.splice(categoryIndex, 1)[0];
-    }
-    return null;
+  deleteCategory(categoryId: number) {
+    this.categories = this.categories.filter(
+      (category) => category.id !== categoryId
+    );
+    return;
   }
 }

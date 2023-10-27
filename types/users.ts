@@ -1,9 +1,7 @@
-export type User = {
-    id: number,
-    email: string,
-    password: string,
-    name: string,
-    role: string,
-    avatar: string
-}
+import { z } from "zod";
 
+import { UserSchema } from "../models/user";
+
+export type TUserSchema = z.infer<typeof UserSchema>;
+
+export type TUser = TUserSchema & { id: number };

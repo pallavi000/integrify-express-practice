@@ -8,7 +8,7 @@ import { routeNotFound } from "./middlewares/routeNotFound";
 // routes
 import productsRoute from "./routes/productsRoute";
 import categoriesRoute from "./routes/categoriesRoute";
-import usersRoute from "./routes/usersRoute.js";
+import usersRoute from "./routes/usersRoute";
 
 // app config
 const app = express();
